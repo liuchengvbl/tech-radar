@@ -1,0 +1,80 @@
+# Intelligence Analyst — Scan Configuration
+# 本文件是整个情报搜集系统的核心配置，也是唯一需要人工编辑的文件。
+# 周报会自动更新 signals 区域，月报会生成修改建议供你审核后合并。
+
+# ============================================================
+# 元信息
+# ============================================================
+meta:
+  instance: example              # 实例名称，出现在报告 frontmatter 中
+  title: 技术前沿情报            # 显示标题
+  description: 技术前沿情报搜集示例配置
+  output_language: Chinese       # 报告输出语言
+  time_window: 48h               # 每次日报扫描覆盖的时间窗口
+
+# ============================================================
+# 资源预算（控制 token 消耗倾向）
+# ============================================================
+budget:
+  mode: unlimited                # unlimited / standard / economy
+  paper:
+    daily_deep_read: 3           # 日报精读论文上限
+    weekly_deep_read: 2          # 周报精读论文上限
+    monthly_deep_read: 3         # 月报精读论文上限
+
+# ============================================================
+# 搜集领域
+# weight: high（广泛搜索）/ medium（核心搜索）/ low（基本扫描）
+# ============================================================
+domains:
+  - name: 领域一
+    weight: high
+    description: 填写领域描述
+    keywords:
+      - keyword1
+      - keyword2
+      - 关键词一
+    watch_entities: []           # 重点跟踪的公司/机构
+
+  - name: 领域二
+    weight: medium
+    description: 填写领域描述
+    keywords:
+      - keyword3
+      - keyword4
+    watch_entities:
+      - CompanyA
+      - CompanyB
+
+  - name: 领域三
+    weight: low
+    description: 填写领域描述
+    keywords:
+      - keyword5
+    watch_entities: []
+
+# ============================================================
+# 固定信息源
+# ============================================================
+sources:
+  - name: 示例学术源
+    url: https://example.com/journal
+    type: academic               # academic / industry / market
+    quality: high                # high / medium / low
+    note: 顶级期刊
+
+  - name: 示例行业媒体
+    url: https://example.com/news
+    type: industry
+    quality: medium
+    note: 行业新闻
+
+# ============================================================
+# 信号追踪（由周报自动维护）
+# 四象限模型：trending / emerging / fading / declining
+# ============================================================
+signals:
+  trending: []
+  emerging: []
+  fading: []
+  declining: []

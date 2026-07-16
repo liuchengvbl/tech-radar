@@ -1,0 +1,15 @@
+[Unit]
+Description=GLM web_search proxy for opencode
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/mi/.nvm/versions/node/v20.20.2/bin/node /home/mi/.config/opencode/glm-websearch-proxy.js
+Restart=always
+RestartSec=3
+Environment=GLM_PROXY_PORT=8899
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
