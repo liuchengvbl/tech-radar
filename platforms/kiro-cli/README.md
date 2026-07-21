@@ -1,26 +1,29 @@
-# Kiro-CLI 适配
+[中文](README_ZH.md)
 
-## 前置条件
+---
+# Kiro-CLI Adaptation
 
-- [kiro-cli](https://kiro.dev) 已安装
+## Prerequisites
+
+- [kiro-cli](https://kiro.dev) installed
 - Python 3 + pyyaml + arxiv
-- Agent 已在 `~/.kiro/agents/tech-radar.json` 中注册
+- Agent registered in `~/.kiro/agents/tech-radar.json`
 
-## 安装
+## Installation
 
-### 1. 注册 agent
+### 1. Register the agent
 
-在 `~/.kiro/agents/tech-radar.json` 中注册 agent，引用 `$INSTALL_DIR/scripts/agent.md` 作为 prompt。
+Register the agent in `~/.kiro/agents/tech-radar.json`, referencing `$INSTALL_DIR/scripts/agent.md` as the prompt.
 
-### 2. 安装脚本
+### 2. Install scripts
 
-将 `daily.sh`、`weekly.sh`、`monthly.sh`、`agent.md` 复制到 `$INSTALL_DIR/scripts/`。
+Copy `daily.sh`, `weekly.sh`, `monthly.sh`, and `agent.md` to `$INSTALL_DIR/scripts/`.
 
-### 3. 安装 core 文件
+### 3. Install core files
 
-确保 `core/` 目录在 `$INSTALL_DIR/core/`。
+Ensure the `core/` directory is at `$INSTALL_DIR/core/`.
 
-### 4. 配置 crontab
+### 4. Configure crontab
 
 ```
 0 6  * * * $INSTALL_DIR/scripts/daily.sh $INSTANCE_DIR
@@ -28,9 +31,9 @@
 0 3  1 * * $INSTALL_DIR/scripts/monthly.sh $INSTANCE_DIR
 ```
 
-## 模型配置
+## Model Configuration
 
-在 `instance.env` 中使用完整模型名：
+Use full model names in `instance.env`:
 
 ```bash
 MODEL_DAILY="claude-sonnet-4.6"
@@ -38,12 +41,12 @@ MODEL_WEEKLY="claude-opus-4.6"
 MODEL_MONTHLY="claude-opus-4.6"
 ```
 
-## 网络搜索
+## Web Search
 
-kiro-cli 原生支持 `web_search` 和 `web_fetch` 工具，无需额外配置。
+kiro-cli natively supports `web_search` and `web_fetch` tools, no extra configuration needed.
 
-## 已知限制
+## Known Limitations
 
-- `write` 工具每次调用限制 ≤150 行，需要分段写入（create + append）
-- kiro-cli 在 API dispatch timeout 后可能返回 exit=0，脚本内置 `is_dispatch_failure()` 检测
-- cron 环境需要手动设置 PATH（脚本已内置 nvm 探测）
+- The `write` tool has a per-call limit of ≤150 lines; segmented writing is required (create + append)
+- kiro-cli may return exit=0 after an API dispatch timeout; the script includes a built-in `is_dispatch_failure()` check
+- The cron environment requires manual PATH setup (nvm detection is built into the scripts)

@@ -1,44 +1,48 @@
 # Intelligence Analyst — Scan Configuration
+# 情报分析师 — 扫描配置
+# This file is the core configuration of the intelligence collection system, and the only file that requires manual editing.
 # 本文件是整个情报搜集系统的核心配置，也是唯一需要人工编辑的文件。
+# The weekly report auto-updates the signals section; the monthly report generates modification proposals for your review.
 # 周报会自动更新 signals 区域，月报会生成修改建议供你审核后合并。
 
 # ============================================================
-# 元信息
+# Meta Information / 元信息
 # ============================================================
 meta:
-  instance: example              # 实例名称，出现在报告 frontmatter 中
-  title: 技术前沿情报            # 显示标题
-  description: 技术前沿情报搜集示例配置
-  output_language: Chinese       # 报告输出语言
-  time_window: 48h               # 每次日报扫描覆盖的时间窗口
+  instance: example              # Instance name, appears in report frontmatter / 实例名称，出现在报告 frontmatter 中
+  title: Tech Frontier Intelligence  # Display title / 显示标题
+  description: Example configuration for tech frontier intelligence collection
+  output_language: Chinese       # Report output language: Chinese or English / 报告输出语言：Chinese 或 English
+  time_window: 48h               # Time window covered by each daily scan / 每次日报扫描覆盖的时间窗口
 
 # ============================================================
+# Resource Budget (controls token consumption tendency)
 # 资源预算（控制 token 消耗倾向）
 # ============================================================
 budget:
   mode: unlimited                # unlimited / standard / economy
   paper:
-    daily_deep_read: 3           # 日报精读论文上限
-    weekly_deep_read: 2          # 周报精读论文上限
-    monthly_deep_read: 3         # 月报精读论文上限
+    daily_deep_read: 3           # Max papers to deep-read in daily report / 日报精读论文上限
+    weekly_deep_read: 2          # Max papers to deep-read in weekly report / 周报精读论文上限
+    monthly_deep_read: 3         # Max papers to deep-read in monthly report / 月报精读论文上限
 
 # ============================================================
-# 搜集领域
+# Collection Domains / 搜集领域
+# weight: high (broad search) / medium (core search) / low (basic scan)
 # weight: high（广泛搜索）/ medium（核心搜索）/ low（基本扫描）
 # ============================================================
 domains:
-  - name: 领域一
+  - name: Domain One
     weight: high
-    description: 填写领域描述
+    description: Fill in domain description / 填写领域描述
     keywords:
       - keyword1
       - keyword2
-      - 关键词一
-    watch_entities: []           # 重点跟踪的公司/机构
+    watch_entities: []           # Key companies/institutions to track / 重点跟踪的公司/机构
 
-  - name: 领域二
+  - name: Domain Two
     weight: medium
-    description: 填写领域描述
+    description: Fill in domain description / 填写领域描述
     keywords:
       - keyword3
       - keyword4
@@ -46,31 +50,33 @@ domains:
       - CompanyA
       - CompanyB
 
-  - name: 领域三
+  - name: Domain Three
     weight: low
-    description: 填写领域描述
+    description: Fill in domain description / 填写领域描述
     keywords:
       - keyword5
     watch_entities: []
 
 # ============================================================
-# 固定信息源
+# Fixed Information Sources / 固定信息源
 # ============================================================
 sources:
-  - name: 示例学术源
+  - name: Example Academic Source
     url: https://example.com/journal
     type: academic               # academic / industry / market
     quality: high                # high / medium / low
-    note: 顶级期刊
+    note: Top-tier journal / 顶级期刊
 
-  - name: 示例行业媒体
+  - name: Example Industry Media
     url: https://example.com/news
     type: industry
     quality: medium
-    note: 行业新闻
+    note: Industry news / 行业新闻
 
 # ============================================================
+# Signal Tracking (auto-maintained by weekly report)
 # 信号追踪（由周报自动维护）
+# Four-quadrant model: trending / emerging / fading / declining
 # 四象限模型：trending / emerging / fading / declining
 # ============================================================
 signals:

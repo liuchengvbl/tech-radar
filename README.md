@@ -1,28 +1,30 @@
-# tech-radar — 技术前沿情报 Agent
+[中文](README_ZH.md)
 
-自动化技术情报搜集系统。通过 cron 定时调度 AI agent，扫描指定领域的最新动态，生成结构化日报/周报/月报。
+# tech-radar — Tech Frontier Intelligence Agent
 
-支持多平台（Claude Code / OpenCode / Kiro-CLI），同一套 prompt 和配置可跨平台运行。
+An automated tech intelligence collection system. It schedules AI agents via cron to scan the latest developments in specified domains and generate structured daily/weekly/monthly reports.
 
-## 功能
+Supports multiple platforms (Claude Code / OpenCode / Kiro-CLI) — the same set of prompts and configs can run across platforms.
 
-- **日报**：每日自动扫描多个技术领域，生成带引用来源的 Markdown 报告
-- **周报**：汇总一周日报，绘制信号趋势图（TEM 四象限模型）
-- **月报**：深度趋势分析，含 Hype Cycle 阶段判定、TRL 评估、配置修改建议
-- **多实例**：同一套脚本可驱动多个不同领域的实例（如 sensor、robotics、biotech）
+## Features
 
-## 目录结构
+- **Daily Report**: Automatically scans multiple tech domains each day, generating Markdown reports with cited sources
+- **Weekly Report**: Aggregates the week's daily reports and plots signal trend charts (TEM four-quadrant model)
+- **Monthly Report**: In-depth trend analysis, including Hype Cycle phase determination, TRL assessment, and config modification suggestions
+- **Multi-Instance**: The same set of scripts can drive multiple instances for different domains (e.g. sensor, robotics, biotech)
+
+## Directory Structure
 
 ```
 tech-radar-port/
-├── core/                           # 平台无关的核心资产
-│   ├── agent-prompt.md             #   通用 agent 系统提示（不含具体工具名）
-│   ├── daily.prompt.md             #   日报 prompt 模板
-│   ├── weekly.prompt.md            #   周报 prompt 模板
-│   ├── monthly.prompt.md           #   月报 prompt 模板
-│   ├── review-config.sh            #   月度配置审核辅助脚本
-│   ├── SKILL.md                    #   系统维护技能文档
-│   └── skills/                     #   打包的 skill 文件
+├── core/                           # Platform-agnostic core assets
+│   ├── agent-prompt.md             #   Generic agent system prompt (no specific tool names)
+│   ├── daily.prompt.md             #   Daily report prompt template
+│   ├── weekly.prompt.md            #   Weekly report prompt template
+│   ├── monthly.prompt.md           #   Monthly report prompt template
+│   ├── review-config.sh            #   Monthly config review helper script
+│   ├── SKILL.md                    #   System maintenance skill doc
+│   └── skills/                     #   Bundled skill files
 │       ├── arxiv-search/
 │       ├── deep-research/
 │       ├── environmental-scanning-foresight/
@@ -30,33 +32,33 @@ tech-radar-port/
 │       └── rss-agent-discovery/
 │
 ├── instance-template/
-│   ├── instance.env.template       #   实例配置模板（路径、模型、超时）
-│   └── scan-config.example.yaml    #   搜集领域配置示例
+│   ├── instance.env.template       #   Instance config template (paths, model, timeouts)
+│   └── scan-config.example.yaml    #   Scan domain config example
 │
-├── platforms/                      # 平台适配层
-│   ├── PORTING-GUIDE.md            #   移植到新平台的完整指南（面向 AI agent）
-│   ├── claude-code/                #   Claude Code 适配
-│   │   ├── agent.md                #     Agent 定义（frontmatter + 工具映射）
+├── platforms/                      # Platform adaptation layer
+│   ├── PORTING-GUIDE.md            #   Full guide for porting to a new platform (AI-agent oriented)
+│   ├── claude-code/                #   Claude Code adapter
+│   │   ├── agent.md                #     Agent definition (frontmatter + tool mapping)
 │   │   ├── daily.sh / weekly.sh / monthly.sh
 │   │   ├── hooks/                  #     shell-guard + write-guard
 │   │   └── README.md
-│   ├── opencode/                   #   OpenCode 适配
+│   ├── opencode/                   #   OpenCode adapter
 │   │   ├── agent.md
 │   │   ├── daily.sh / weekly.sh / monthly.sh
-│   │   ├── glm-websearch-proxy.js  #     GLM/GPT web_search 代理（可选）
+│   │   ├── glm-websearch-proxy.js  #     GLM/GPT web_search proxy (optional)
 │   │   ├── glm-websearch-proxy.service
 │   │   └── README.md
-│   └── kiro-cli/                   #   Kiro-CLI 适配
+│   └── kiro-cli/                   #   Kiro-CLI adapter
 │       ├── agent.md
 │       ├── daily.sh / weekly.sh / monthly.sh
 │       └── README.md
 │
-├── setup.sh                        # 交互式安装向导
+├── setup.sh                        # Interactive install wizard
 ├── LICENSE
 └── README.md
 ```
 
-## 快速开始
+## Quick Start
 
 ```bash
 git clone <repo-url> tech-radar-port
@@ -64,47 +66,49 @@ cd tech-radar-port
 bash setup.sh
 ```
 
-安装向导会询问：
-1. 目标平台（Claude Code / OpenCode / Kiro-CLI）
-2. Agent 安装目录
-3. 实例名称（如 `sensor`）
-4. 报告输出目录
-5. 是否自动写入 crontab
+The install wizard will ask for:
+1. Target platform (Claude Code / OpenCode / Kiro-CLI)
+2. Agent install directory
+3. Instance name (e.g. `sensor`)
+4. Report output directory
+5. Whether to auto-write crontab entries
 
-## 配置
+## Configuration
 
-安装完成后，编辑实例目录下的 `scan-config.yaml`：
+After installation, edit the `scan-config.yaml` in the instance directory:
 
-- `domains`：定义搜集领域、关键词、重点跟踪实体
-- `budget.mode`：`unlimited` / `standard` / `economy`（控制 token 消耗）
-- `sources`：固定巡检的信息源 URL
-- `signals`：由周报自动维护，记录趋势信号状态
+- `domains`: Define scan domains, keywords, and entities to track
+- `budget.mode`: `unlimited` / `standard` / `economy` (controls token consumption)
+- `sources`: Fixed URLs of information sources to patrol
+- `signals`: Auto-maintained by the weekly report, records trend signal status
 
-`instance.env` 控制运行参数（超时、模型、输出路径）。
+`instance.env` controls runtime parameters (timeouts, model, output paths).
 
-## 手动运行
+> **Output Language**: The output language of reports is controlled by the `scan-config.yaml` → `meta.output_language` field, which can be set to `Chinese` or `English`.
+
+## Manual Run
 
 ```bash
-# 日报
+# Daily report
 bash <install_dir>/scripts/daily.sh <instance_dir>
 
-# 周报
+# Weekly report
 bash <install_dir>/scripts/weekly.sh <instance_dir>
 
-# 月报
+# Monthly report
 bash <install_dir>/scripts/monthly.sh <instance_dir>
 ```
 
-## 移植到新平台
+## Porting to a New Platform
 
-如果目标平台不在已支持列表中，参考 [platforms/PORTING-GUIDE.md](platforms/PORTING-GUIDE.md)。
-该指南面向 AI agent，包含完整的调研、适配、测试、排障流程。
+If your target platform is not in the supported list, refer to [platforms/PORTING-GUIDE.md](platforms/PORTING-GUIDE.md).
+The guide is AI-agent oriented and includes the full research, adaptation, testing, and troubleshooting workflow.
 
-## 依赖
+## Dependencies
 
-| 依赖 | 安装方式 |
-|------|---------|
-| Python 3 | 系统自带或 `apt install python3` |
+| Dependency | Install Method |
+|------------|----------------|
+| Python 3 | Pre-installed on most systems, or `apt install python3` |
 | pyyaml | `pip3 install pyyaml` |
 | arxiv | `pip3 install arxiv` |
-| AI 编码平台 CLI | Claude Code / OpenCode / Kiro-CLI 任选其一 |
+| AI coding platform CLI | Any one of Claude Code / OpenCode / Kiro-CLI |

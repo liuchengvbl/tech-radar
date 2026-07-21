@@ -1,16 +1,19 @@
-# OpenCode 适配
+[中文](README_ZH.md)
 
-## 前置条件
+---
+# OpenCode Adaptation
 
-- [opencode](https://opencode.ai) CLI 已安装
+## Prerequisites
+
+- [opencode](https://opencode.ai) CLI installed
 - Python 3 + pyyaml + arxiv
-- 模型 provider 已在 `~/.config/opencode/opencode.json` 中配置
+- Model provider configured in `~/.config/opencode/opencode.json`
 
-## 安装
+## Installation
 
-### 1. 安装 agent 定义
+### 1. Install the agent definition
 
-将 `agent.md` 复制到 opencode 全局 agents 目录，替换占位符：
+Copy `agent.md` to the opencode global agents directory, substituting placeholders:
 
 ```bash
 sed -e "s|{{INSTALL_DIR}}|$INSTALL_DIR|g" \
@@ -19,15 +22,15 @@ sed -e "s|{{INSTALL_DIR}}|$INSTALL_DIR|g" \
     agent.md > ~/.config/opencode/agents/tech-radar.md
 ```
 
-### 2. 安装脚本
+### 2. Install scripts
 
-将 `daily.sh`、`weekly.sh`、`monthly.sh` 复制到 `$INSTALL_DIR/scripts/`。
+Copy `daily.sh`, `weekly.sh`, `monthly.sh` to `$INSTALL_DIR/scripts/`.
 
-### 3. 安装 core 文件
+### 3. Install core files
 
-确保 `core/` 目录在 `$INSTALL_DIR/core/`（包含 prompt 模板和 skills）。
+Ensure the `core/` directory is at `$INSTALL_DIR/core/` (contains prompt templates and skills).
 
-### 4. 配置 crontab
+### 4. Configure crontab
 
 ```
 0 6  * * * $INSTALL_DIR/scripts/daily.sh $INSTANCE_DIR
@@ -35,9 +38,9 @@ sed -e "s|{{INSTALL_DIR}}|$INSTALL_DIR|g" \
 0 3  1 * * $INSTALL_DIR/scripts/monthly.sh $INSTANCE_DIR
 ```
 
-## 模型配置
+## Model Configuration
 
-在 `instance.env` 中使用 `provider/model-id` 格式：
+Use the `provider/model-id` format in `instance.env`:
 
 ```bash
 MODEL_DAILY="mify-openai/ppio/pa/gpt-5.5"
@@ -45,27 +48,27 @@ MODEL_WEEKLY="mify-zhipu/zhipuai/glm-5.2"
 MODEL_MONTHLY="mify-zhipu/zhipuai/glm-5.2"
 ```
 
-## 网络搜索
+## Web Search
 
-OpenCode 的 `websearch` 工具需要 `OPENCODE_ENABLE_EXA=1` 环境变量。
+OpenCode's `websearch` tool requires the `OPENCODE_ENABLE_EXA=1` environment variable.
 
-如果使用支持原生 web_search 的模型（如 GLM-5.2、GPT-5.5），但平台的 provider 适配器不透传该参数，可以部署本地 HTTP 代理注入 `web_search` tool：
+If using a model that supports native web_search (e.g., GLM-5.2, GPT-5.5), but the platform's provider adapter does not pass through that parameter, you can deploy a local HTTP proxy to inject the `web_search` tool:
 
 ```bash
-# 安装代理
+# Install the proxy
 cp glm-websearch-proxy.js ~/.config/opencode/
 cp glm-websearch-proxy.service ~/.config/systemd/user/
 systemctl --user daemon-reload
 systemctl --user enable --now glm-websearch-proxy
 
-# 在 opencode.json 中将 provider 的 baseURL 指向代理
+# In opencode.json, point the provider's baseURL to the proxy
 # "baseURL": "http://127.0.0.1:8899/v1"
 ```
 
-代理会自动为 GLM 和 GPT 模型的请求注入 `{"type":"web_search","web_search":{"enable":true,"search_result":true}}` 工具。
+The proxy automatically injects the `{"type":"web_search","web_search":{"enable":true,"search_result":true}}` tool for GLM and GPT model requests.
 
-## 已知限制
+## Known Limitations
 
-- opencode 的 `webfetch` 工具默认可用，无需额外配置
-- `write` 和 `apply_patch` 均受 `edit` 权限控制，两者均可用于写文件
-- cron 环境需要手动设置 PATH（脚本已内置 nvm 探测）
+- opencode's `webfetch` tool is available by default, no extra configuration needed
+- Both `write` and `apply_patch` are governed by the `edit` permission; either can be used to write files
+- The cron environment requires manual PATH setup (nvm detection is built into the scripts)
