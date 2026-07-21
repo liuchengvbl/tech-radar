@@ -48,28 +48,13 @@
 - 哪些信息源多次未能提供有效内容
 
 
-### 阶段 1.5：外部热度查询
+<!-- 移植者注：原版在此处有"阶段 1.5：外部热度查询"，使用 pytrends (Google Trends) 和
+     Semantic Scholar API 查询 top 15 tags 的外部热度。因 pytrends 停更且与 urllib3 2.x
+     不兼容、Semantic Scholar API 频繁 429 限流，已移除。如果你有可用的外部热度数据源
+     （如 Google Trends 官方 API、百度指数 API 等），可在阶段 1 和阶段 2 之间插入一个
+     "阶段 1.5：外部热度查询"步骤，查询结果附加到 tag 热度表中作为补充指标。
+     详见 DESIGN-DECISIONS.md "为什么移除外部热度查询"一节。 -->
 
-对阶段 1 中排名 top 15 的 tags，查询外部热度数据作为补充指标：
-
-**Google Trends 搜索热度**
-使用 pytrends 库查询每个 tag 过去 7 天的搜索热度指数（0-100）：
-```python
-from pytrends.request import TrendReq
-pytrends = TrendReq()
-pytrends.build_payload([tag], timeframe='now 7-d')
-data = pytrends.interest_over_time()
-```
-如果查询失败（网络问题、被限流），跳过该 tag，不中断流程。
-
-**学术引用量**（可选）
-对本周日报中来自 arXiv 的论文，通过 Semantic Scholar API 查询引用数：
-```
-GET https://api.semanticscholar.org/graph/v1/paper/ArXiv:{arxiv_id}?fields=citationCount
-```
-如果 API 不可用，跳过。
-
-将查询结果附加到 tag 热度表中，作为"外部热度"列。
 
 ### 阶段 2：事件聚类与去重
 
@@ -186,7 +171,7 @@ new_signals: [本周新增信号]
 
 ### Tag 热度排名
 
-| 排名 | Tag | 出现天数 | Topic Share | 周环比 | Google Trends | 状态 |
+| 排名 | Tag | 出现天数 | Topic Share | 周环比 | 状态 |
 |------|-----|---------|------------|--------|--------------|------|
 | 1 | xxx | 5/6 | 12.3% | ↑+2.1% | 73 | trending |
 | ... | | | | | | |
